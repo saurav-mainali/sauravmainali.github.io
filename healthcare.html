@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <title>G20 Spending - Health Care</title>
+
+    
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script>
+        google.charts.load('current', {packages: ['corechart','bar']});
+        google.charts.setOnLoadCallback(drawAllSheets);
+
+
+        function drawAllSheets(){
+            drawSheetName('AllExpenditure','SELECT I,J,K,L,M,N',
+            healthSpendingResponseHandler);
+
+            drawSheetName('AllExpenditurePercent','SELECT J,P',
+            healthSpendingPercentResponseHandler);
+
+            drawSheetName('PerCapitaHealth','SELECT A,G,P',
+            healthSpendingPerCapitaResponseHandler);
+
+            drawSheetName('Growth','SELECT A,F,C',
+            healthGrowthResponseHandler);
+
+        }//drawAllSheets
+
+
+        function drawSheetName(sheetName,query,responseHandler){
+            var queryString = encodeURIComponent(query);
+            var query = new google.visualization.Query(
+                "https://docs.google.com/spreadsheets/d/1Dycfv06ht8kgOKez6qMbw1kmeJKn1u7HP7nRYHvetBU/gviz/tq?sheet="+sheetName+"&headers=1&tq="+queryString);
+            query.send(responseHandler);
+        }//drawSheetName
+
+      
+      
+
+        function healthSpendingResponseHandler(response){
+            var data = response.getDataTable();
+            data.sort({column:5,desc:true});
+
+            var formatter = new google.visualization.NumberFormat({
+                fractionDigits:2
+            });
+            formatter.format(data,1);
+            formatter.format(data,2);
+            formatter.format(data,3);
+            formatter.format(data,4);
+            formatter.format(data,5);
+
+            var options={height:400,vAxis:{title:'Spending in Billions ($)'},hAxis:{title:'Country'}};
+
+            var chart =  new google.visualization.ColumnChart(document.getElementById("health_spending_div"));
+
+            chart.draw(data,options);
+        }//healthSpendingResponseHandler
+
+        function healthSpendingPercentResponseHandler(response){
+            var data = response.getDataTable();
+            data.sort({column:1,desc:true});
+
+
+            var formatter = new google.visualization.NumberFormat({
+                fractionDigits:2,suffix:'%'
+            });
+            formatter.format(data,1);
+
+            var options={height:400,vAxis:{title:'Percent of GDP (%)'},hAxis:{title:'Country'},colors : ['#5c7d5f'],legend: 'none',
+            title:'On average from 2011-2015, what percent of GDP did each country spend on Health Care?'};
+
+            var chart =  new google.visualization.ColumnChart(document.getElementById("health_spending_percent_div"));
+
+            chart.draw(data,options);
+
+        }//healthSpendingPercentResponseHandler
+
+        function healthSpendingPerCapitaResponseHandler(response){
+            var data = response.getDataTable();
+            var formatter = new google.visualization.NumberFormat({
+                fractionDigits:2,prefix:'$'
+            });
+            formatter.format(data,1);
+            formatter.format(data,2);
+
+            var options={height:400,vAxis:{title:'Health Spending per Capita'},hAxis:{title:'GDP per Capita'},
+            title:'Health Spending per Capita Vs GDP per Capita'
+            };
+
+            var chart =  new google.visualization.BubbleChart(document.getElementById("health_spending_per_capita_div"));
+
+            chart.draw(data,options);
+
+
+        }//healthSpendingPerCapitaResponseHandler
+
+        function healthGrowthResponseHandler(response){
+
+            var data = response.getDataTable();
+            data.sort({column:1,desc:true});
+
+            var formatter1 = new google.visualization.NumberFormat({
+                fractionDigits:2,suffix:'%'
+            });
+            formatter1.format(data,1);
+
+            var formatter2 = new google.visualization.NumberFormat({
+                fractionDigits:2,suffix:'B'
+            });
+            formatter2.format(data,2);
+
+
+            var options = {
+            width:1000
+
+            };
+
+            var chart = new google.charts.Bar(document.getElementById('health_growth_div'));
+            chart.draw(data, options);
+
+
+        }//healthGrowthResponseHandler
+                
+    </script>
+</head>
+<body>
+    
+    <div id="main">
+        
+        <div id="header">
+            <div id="logo">
+                <span id="logo_text">G20 Spendings</span>
+            </div><!--logo-->
+
+            <div id="menubar">
+                <ul id="menu">
+                        <li><a href ="index.html">Home</a></li>
+                        <li><a href ="military.html" >Military</a></li>
+                        <li><a href="education.html">Education</a></li>
+                        <li class="selected"><a href = "healthcare.html">Health Care</a></li>   
+                        <li><a href = "comparision.html">Comparision</a></li>                   
+                </ul><!--menu-->
+            </div><!--menubar-->
+        </div><!--header-->
+
+        <div style="clear:both" id="site_content">
+            <br/>
+            <h1>Analyzing Health Spendings for Top Countries</h1>
+            <div id='health_spending_div' style="width:900px; height: 440px" class="graph"></div> 
+            <p class="texts">In terms of monetary value United States spent way more in Health Care sector as compared to other G20 countries. Indonesia on the other hand spent the least amount of money. This makes sense as GDP of United States for each year is very high as compared to other countries. So, we were interested in looking at the proportion of GDP spent by the countries.  </p>
+            
+            
+            <div id='health_spending_percent_div' style="width:900px; height: 440px" class="graph"></div> 
+            <p class="texts">It can be seen that, United States spent the highest percentage of it's GDP in health care followed by France and Germany. Indonesia spent the lowest percentage of it's GDP in the sector.</p>
+
+            
+            
+            <div id='health_spending_per_capita_div' style="width:900px; height: 440px" class="graph"></div>
+            <p class="texts">We can see that countries with low GDP per capita have low health care spending per capita. With increasing GDP per capita, health care spending per capita is also subsequently increasing. </p>
+
+            <br/>
+            <h1>Analyzing Growth over the years in Monetary and Percentage values</h1> 
+            <div id='health_growth_div' style="width:900px; height: 440px" class="graph shrink-me"></div>
+            <p class="texts">Over the period of five years, China has the highest Growth of 64.87% in Health Care spendings. This is equivalent to 211.88 Billions. On the other hand, spendings dropped down by 27% in Japan. </p>
+
+
+
+        </div><!--site_content-->
+
+        <div style="clear:both" id="footer">
+            Copyright &copy; 
+            <script>
+                var d = new Date();
+                document.write(d.getFullYear());
+            </script>
+            | <span>Mainali Saurav</span>
+
+        </div><!--footer-->
+
+    </div>
+
+</body>
+</html>

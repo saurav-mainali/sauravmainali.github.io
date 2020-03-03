@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <title>G20 Spending - Comparision</title>
+
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {packages: ['corechart']});
+        google.charts.setOnLoadCallback(drawAllSheets);
+
+
+        function drawAllSheets(){
+
+            drawSheetName('AllExpenditure','SELECT A,G,O',
+            compareMilitaryHealthResponseHandler);
+
+            drawSheetName('AllExpenditurePercent','SELECT A,G,P',
+            compareMilitaryHealthPercentResponseHandler);
+
+            drawSheetName('AllExpenditure','SELECT A,G,W',
+            compareMilitaryEducationResponseHandler);
+
+            drawSheetName('AllExpenditurePercent','SELECT A,G,Y',
+            compareMilitaryEducationPercentResponseHandler);
+
+        }//drawAllSheets
+
+
+        function drawSheetName(sheetName,query,responseHandler){
+            var queryString = encodeURIComponent(query);
+            var query = new google.visualization.Query(
+                "https://docs.google.com/spreadsheets/d/1Dycfv06ht8kgOKez6qMbw1kmeJKn1u7HP7nRYHvetBU/gviz/tq?sheet="+sheetName+"&headers=1&tq="+queryString);
+            query.send(responseHandler);
+        }//drawSheetName
+
+    
+        function compareMilitaryHealthResponseHandler(response){
+            var data = response.getDataTable();
+
+            var formatter = new google.visualization.NumberFormat({
+                fractionDigits:2,prefix:'$'
+            });
+            formatter.format(data,1); 
+            formatter.format(data,2);
+
+            var chart = new google.visualization.ScatterChart(
+                document.getElementById('military_vs_health_div')
+            );
+
+            var options={
+                height:400,               
+                hAxis: {title:'Country'},
+                vAxis : {title:'Spending in Billions ($)'},
+                title : 'Average Health Care Spendings Vs Average Military Spendings from year 2011-2015'        
+            }
+
+            chart.draw(data,options);  
+
+        }//compareMilitaryHealthResponseHandler
+
+        function compareMilitaryEducationResponseHandler(response){
+            
+            var data = response.getDataTable();
+
+            var formatter = new google.visualization.NumberFormat({
+                fractionDigits:2,prefix:'$'
+            });
+            formatter.format(data,1); 
+            formatter.format(data,2);
+
+            var chart = new google.visualization.ScatterChart(
+                document.getElementById('military_vs_education_div')
+            );
+
+            var options={
+                height:400,               
+                hAxis: {title:'Country'},
+                vAxis : {title:'Spending in Billions ($)'},
+                title : 'Average Education Spendings Vs Average Military Spendings from year 2011-2015'        
+            }
+
+            chart.draw(data,options);  
+
+        }//compareMilitaryEducationResponseHandler
+
+
+        function compareMilitaryHealthPercentResponseHandler(response){
+            var data = response.getDataTable();
+            data.sort({column:1,desc:true});
+
+            var formatter = new google.visualization.NumberFormat({
+                fractionDigits:2,suffix:'%'
+            });
+            formatter.format(data,1);
+            formatter.format(data,2);
+
+            var options = {
+                width:600,
+                height : 400,
+                legend :{position:'top',maxLines :1},
+                bar:{groupWidth:'75%'},
+                isStacked: true,
+                vAxis:{title:'Country'},
+                hAxis:{title:'% of GDP Spent'},
+                title:'Average % of GDP spent on Health Care Vs Average % of GDP spent on Military from year 2011-2015'
+
+            };
+
+            var chart =  new google.visualization.BarChart(
+                document.getElementById('military_vs_health_percent_div')
+            );
+
+            chart.draw(data,options)
+
+        }//compareMilitaryHealthPercentResponseHandler
+
+        function compareMilitaryEducationPercentResponseHandler(response){
+
+            var data = response.getDataTable();
+            data.sort({column:1,desc:true});
+
+            var formatter = new google.visualization.NumberFormat({
+                fractionDigits:2,suffix:'%'
+            });
+            formatter.format(data,1);
+            formatter.format(data,2);
+
+            var options = {
+                width:600,
+                height : 400,
+                legend :{position:'top',maxLines :1},
+                bar:{groupWidth:'75%'},
+                isStacked: true,
+                vAxis:{title:'Country'},
+                hAxis:{title:'% of GDP Spent'},
+                title:'Average % of GDP spent on Education Vs Average % of GDP spent on Military from year 2011-2015'
+
+            };
+
+            var chart =  new google.visualization.BarChart(
+                document.getElementById('military_vs_education_percent_div')
+            );
+
+            chart.draw(data,options)
+
+
+        }//compareMilitaryEducationPercentResponseHandler
+
+
+                
+    </script>
+
+
+
+
+
+
+
+
+</head>
+<body>
+    
+    <div id="main">
+        
+        <div id="header">
+            <div id="logo">
+                <span id="logo_text">G20 Spendings</span>
+            </div><!--logo-->
+
+            <div id="menubar">
+                <ul id="menu">
+                        <li><a href ="index.html">Home</a></li>
+                        <li><a href ="military.html" >Military</a></li>
+                        <li><a href="education.html">Education</a></li>
+                        <li><a href = "healthcare.html">Health Care</a></li>   
+                        <li class="selected"><a href = "comparision.html">Comparision</a></li>                   
+                </ul><!--menu-->
+            </div><!--menubar-->
+        </div><!--header-->
+
+        <div style="clear:both" id="site_content">
+            <br/>
+            <h1>Comparing Health Care Spendings with Military Spendings</h1>                               
+            <div id='military_vs_health_div' style="width:900px; height: 500px" class="graph"></div> 
+            <div id='military_vs_health_percent_div' style="width:900px; height: 430px" class="graph"></div>
+            <p class="texts">From these graphs we can see that G20 countries spend more in Health Care as compared to Military. Saudi Arabia seems to be the only exception.  </p>
+            
+            <br/>
+
+            <h1>Comparing Education Spendings with Military Spendings</h1>                               
+            
+            <div id='military_vs_education_div' style="width:900px; height: 500px" class="graph"></div> 
+            <div id='military_vs_education_percent_div' style="width:900px; height: 430px" class="graph"></div>
+            <p class="texts">Most of the G20 countries spend more in Education as compared to Military. Saudi Arabia, China and Russia spent slightly higher in Military as compared to Education.</p>
+
+
+
+        </div><!--site_content-->
+
+        <div style="clear:both" id="footer">
+            Copyright &copy; 
+            <script>
+                var d = new Date();
+                document.write(d.getFullYear());
+            </script>
+            | <span>Mainali Saurav</span>
+
+        </div><!--footer-->
+
+    </div>
+
+</body>
+</html>

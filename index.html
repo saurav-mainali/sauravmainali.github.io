@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <title>G20 Spending - Home</title>
+
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {packages: ['corechart']});
+        google.charts.setOnLoadCallback(drawAllSheets);
+
+
+        function drawAllSheets(){
+            drawSheetName('AverageExpenditure','SELECT A,G',
+            averageSpendingResponseHandler);
+
+            drawSheetName('AverageExpenditure','SELECT A,G',
+            averageSpendingWorldResopnseHandler);
+
+
+        }//drawAllSheets
+
+
+        function drawSheetName(sheetName,query,responseHandler){
+            var queryString = encodeURIComponent(query);
+            var query = new google.visualization.Query(
+                "https://docs.google.com/spreadsheets/d/1Dycfv06ht8kgOKez6qMbw1kmeJKn1u7HP7nRYHvetBU/gviz/tq?sheet="+sheetName+"&headers=1&tq="+queryString);
+            query.send(responseHandler);
+        }//drawSheetName
+
+        function averageSpendingResponseHandler(response){
+
+            var data = response.getDataTable();
+            data.sort({column:1,desc:true});
+
+
+              /*formating*/
+            var formatter = new google.visualization.NumberFormat({
+                fractionDigits:2,suffix:'%'
+            });
+            formatter.format(data,1); 
+
+            var options={
+                height:400,
+                legend : 'none',
+                colors : ['#5c7d5f'],
+                bars: 'vertical',
+                vAxis: {title:'Country'},
+                hAxis : {title:'Percentage of GDP (%)'},
+                title : 'On average from 2011-2015, what percent of GDP did each country spend in Education, Health Care and Military combined?'
+
+        
+            }
+            
+            var chart = new google.visualization.BarChart(
+                document.getElementById('average_spending_div')
+            );
+
+
+            chart.draw(data,options);          
+        }//averageSpendingResponseHandler
+
+        function averageSpendingWorldResopnseHandler(response){
+
+            var data = response.getDataTable();
+
+            var chart = new google.visualization.GeoChart(
+                document.getElementById("average_spending_world_div")
+            );
+
+            data.sort({column:1,desc:true});
+
+
+              /*formating*/
+            var formatter = new google.visualization.NumberFormat({
+                fractionDigits:2,suffix:'%'
+            });
+            formatter.format(data,1); 
+
+            var options={
+                height:400,
+                legend:'none'
+
+            }
+
+            chart.draw(data,options)
+
+        }//averageSpendingWorldResopnseHandler
+                
+    </script>
+
+
+
+</head>
+<body>
+    
+    <div id="main">
+        
+        <div id="header">
+            <div id="logo">
+                <span id="logo_text">G20 Spendings</span>
+            </div><!--logo-->
+
+            <div id="menubar">
+                <ul id="menu">
+                        <li class="selected"><a href ="index.html">Home</a></li>
+                        <li><a href ="military.html" >Military</a></li>
+                        <li><a href="education.html">Education</a></li>
+                        <li><a href = "healthcare.html">Health Care</a></li>   
+                        <li><a href = "comparision.html">Comparision</a></li>                   
+                </ul><!--menu-->
+            </div><!--menubar-->
+        </div><!--header-->
+
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div style="clear:both" id="site_content">
+                <h1>Introduction</h1>
+                <p class='texts'>G20 is international forum consisting of the European Union and 19 other countries with the largest world economy. Here spending behaviour of ten G20 countries in Health Care, Military and Education sector from the year 2011-2015 has been analysed. Countries used are - Brazil, China, France, Germany, India, Indonesia, Japan, Russia, Saudi Arabia and United States.</p>
+                <br/>
+                <br/>
+                <div id='average_spending_world_div' style="width:900px; height: 500px" class="graph"></div> 
+                <h1>Comparing Spendings to GDP</h1>               
+                <div id='average_spending_div' style="width:900px; height: 440px" class="graph"></div>
+                <p class="texts">Over the years United States spent the highest percentage (25.02%) of GDP in Military, Health Care and Education combined whereas countries like Indonesia, China, India spent less than 10% of it's GDP.</p> 
+                
+
+        </div><!--site_content-->
+
+        <div style="clear:both" id="footer">
+            Copyright &copy; 
+            <script>
+                var d = new Date();
+                document.write(d.getFullYear());
+            </script>
+            | <span>Mainali Saurav</span>
+
+        </div><!--footer-->
+
+    </div>
+
+</body>
+</html>

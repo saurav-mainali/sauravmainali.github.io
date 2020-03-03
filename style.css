@@ -1,0 +1,105 @@
+#site_content {
+    margin-top: auto;
+    color:gray;  
+}
+
+.graph{
+    display: table;
+    margin: 0 auto;
+}
+
+.shrink-me{
+    transform: scale(0.85);
+}
+
+.texts{
+    font-size: large;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+
+body{
+    margin-left: 10%;
+    margin-right: 10%;
+    font:normal 0.78em arial, sans-serif;   
+}
+
+#logo{
+    position: relative;
+    height: 200px;
+    background: url(money.jpg) round;
+}
+
+#logo #logo_text{
+    text-align: center;
+    font-size: xx-large;
+    display: table;
+    margin-right: auto;
+    margin-left: auto; 
+    color: gray;
+}
+
+#menubar{
+    width: 890px;
+    height:35px;
+    padding: 8px 0 0 0;
+    margin: 0 10px 0 0;
+    position: relative;
+    z-index: 1;
+    float: right;
+}
+
+ul#menu{
+    float:  right;
+    margin: 0px;
+}
+
+
+#menu li{
+    float: left;
+    margin:5px;
+    padding: 0 0 0 6px;
+    list-style: none;
+}
+
+#menu li a{
+    letter-spacing: 0;
+    font: normal 135% arial, sans-serif;
+    display: block;
+    float: left;
+    height: 20px;
+    text-decoration: none;
+    padding: 9px 22px 5px 16px;
+    text-align: center;
+    color: #275e08;
+    border : 0;
+}
+
+ul#menu li.selected a{
+    height: 25px;
+    color: gray;
+    padding:7px 22px 5px 16px;
+} 
+
+ul#menu li.selected{
+    margin: 7px 0 0 0;
+    background: #f8f8f8
+}
+
+ul#menu li a:hover{
+    color:#888;
+    font: normal 145% arial, sans-serif;
+}
+
+#footer{
+    position: relative;
+    height: 80px;
+    width: 100%;  
+    text-align: center;
+    background: rgb(75, 73, 73);
+    color:whitesmoke;
+    letter-spacing: 0.2em;
+    font-size: 80%;
+    padding-top: 29px   
+}
